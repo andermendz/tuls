@@ -1,12 +1,13 @@
-import React, { useState, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Removed Navigate
+import React, { useState, Suspense, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
-import { NotFound } from './pages/NotFound'; // Import NotFound
+import { NotFound } from './pages/NotFound';
 import { Loader2 } from 'lucide-react';
+import { initGA, logPageView } from './utils/analytics';
 
-// ... (Keep existing lazy imports)
+// Lazy Imports
 const MetadataTool = React.lazy(() => import('./features/MetadataTool').then(module => ({ default: module.MetadataTool })));
 const ConverterTool = React.lazy(() => import('./features/ConverterTool').then(module => ({ default: module.ConverterTool })));
 const CompressorTool = React.lazy(() => import('./features/CompressorTool').then(module => ({ default: module.CompressorTool })));
@@ -21,12 +22,31 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Component to track page views on route change
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    logPageView();
+  }, [location]);
+
+  return null;
+};
+
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+
+  // Initialize Google Analytics once when the app mounts
+  useEffect(() => {
+    initGA();
+  }, []);
 
   return (
     <HelmetProvider>
       <BrowserRouter>
+        {/* AnalyticsTracker must be inside BrowserRouter to use useLocation */}
+        <AnalyticsTracker />
+
         <Routes>
           <Route path="/" element={<Layout theme={theme} setTheme={setTheme} />}>
             <Route index element={<Home />} />
@@ -42,7 +62,6 @@ const App: React.FC = () => {
 
             <Route path="settings" element={<Suspense fallback={<LoadingFallback />}><Settings theme={theme} onThemeChange={setTheme} /></Suspense>} />
 
-            {/* Updated 404 Handling */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
