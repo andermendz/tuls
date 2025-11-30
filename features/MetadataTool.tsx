@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { getExifData, scrubMetadata, downloadBlob } from '../utils/imageUtils';
 import { ShieldCheck, Info, RefreshCw, AlertTriangle, ScanLine, Loader2, Camera, MapPin, Calendar } from 'lucide-react';
+import { SEO } from '../components/SEO';
 
 export const MetadataTool: React.FC = () => {
   const [fileData, setFileData] = useState<FileData | null>(null);
@@ -79,6 +80,12 @@ export const MetadataTool: React.FC = () => {
   if (!fileData) {
     return (
       <div className="max-w-4xl mx-auto space-y-8 animate-slide-up">
+        <SEO
+          title="EXIF Viewer & Metadata Remover"
+          description="View hidden EXIF data (location, camera settings) in your photos and strip it for better privacy. 100% client-side."
+          canonical="/image/metadata"
+          keywords={['exif viewer', 'remove metadata', 'scrub exif', 'photo privacy', 'image data viewer']}
+        />
         <div className="space-y-4 mb-8 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-google-blue/10 text-google-blue text-sm font-medium">
             <ScanLine size={16} />
@@ -98,6 +105,7 @@ export const MetadataTool: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in pb-20 md:pb-0">
+      <SEO title="Inspecting Metadata" description="Viewing image details." />
       {/* Left Column: Image & Actions */}
       <div className="lg:col-span-1 space-y-4 flex flex-col">
         <Card variant="elevated" className="p-3 flex-grow flex items-center justify-center relative overflow-hidden min-h-[280px] bg-surface-container-low">

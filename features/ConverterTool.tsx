@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { convertImageFormat, downloadBlob } from '../utils/imageUtils';
 import { FileOutput, ArrowRight, RefreshCw, Loader2, Check } from 'lucide-react';
 import { clsx } from 'clsx';
+import { SEO } from '../components/SEO';
 
 const FORMATS = [
   { mime: 'image/jpeg', label: 'JPEG', ext: 'jpg', desc: 'Best for photos' },
@@ -37,6 +38,12 @@ export const ConverterTool: React.FC = () => {
   if (!fileData) {
     return (
       <div className="max-w-4xl mx-auto space-y-8 animate-slide-up">
+        <SEO
+          title="Image Converter"
+          description="Convert images between JPG, PNG, and WebP formats instantly in your browser. Free, secure, and no uploads required."
+          canonical="/image/converter"
+          keywords={['image converter', 'convert jpg to png', 'convert png to jpg', 'webp converter', 'image format changer']}
+        />
         <div className="text-center md:text-left space-y-4 mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-google-red/10 text-google-red text-sm font-medium">
             <FileOutput size={16} />
@@ -56,6 +63,7 @@ export const ConverterTool: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto animate-fade-in pb-20 md:pb-0">
+      <SEO title={`Convert to ${selectedFormat.label}`} description="Converting your image format." />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
         {/* Source Preview */}

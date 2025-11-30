@@ -1,7 +1,7 @@
 {
   "name": "tuls---image-utility-platform",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,6 +16,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-easy-crop": "^5.5.6",
+    "react-helmet-async": "^2.0.4",
+    "react-router-dom": "^6.22.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

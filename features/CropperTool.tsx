@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { getCroppedImg, downloadBlob } from '../utils/imageUtils';
 import { Crop, Download, RefreshCw, Monitor, Smartphone, Square, RectangleHorizontal, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { SEO } from '../components/SEO';
 
 const ASPECT_OPTIONS = [
   { value: undefined, label: 'Free', icon: Crop },
@@ -45,6 +46,12 @@ export const CropperTool: React.FC = () => {
   if (!fileData) {
     return (
       <div className="max-w-4xl mx-auto space-y-8 animate-slide-up">
+        <SEO
+          title="Image Cropper & Resizer"
+          description="Crop and resize images online with pixel-perfect precision. Use preset aspect ratios for social media or freeform crop."
+          canonical="/image/cropper"
+          keywords={['image cropper', 'crop image', 'resize image', 'photo editor', 'aspect ratio']}
+        />
         <div className="text-center md:text-left space-y-4 mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-google-green/10 text-google-green text-sm font-medium">
             <Crop size={16} />
@@ -64,6 +71,7 @@ export const CropperTool: React.FC = () => {
 
   return (
     <div className="flex flex-col h-auto min-h-screen md:h-[calc(100vh-100px)] animate-fade-in pb-20 md:pb-0">
+      <SEO title="Cropping Image" description="Adjust your crop selection." />
       {/* Cropper Container - Flexible height on mobile, flex-1 on desktop */}
       <div className="relative w-full h-[50vh] md:h-auto md:flex-1 bg-surface-container-high rounded-m3-xl overflow-hidden mb-4 shrink-0">
         <Cropper

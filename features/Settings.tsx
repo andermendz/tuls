@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '../components/ui/Card';
 import { Moon, Sun, Monitor, Palette, Info, Github, Heart } from 'lucide-react';
 import { clsx } from 'clsx';
+import { SEO } from '../components/SEO';
 
 interface SettingsProps {
   theme: 'light' | 'dark' | 'system';
@@ -54,6 +55,11 @@ export const Settings: React.FC<SettingsProps> = ({ theme, onThemeChange }) => {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-slide-up pb-20 md:pb-0">
+      <SEO
+        title="Settings"
+        description="Configure your Tuls experience. Change themes and view app information."
+        canonical="/settings"
+      />
       {/* Header */}
       <div className="space-y-3">
         <h2 className="text-3xl md:text-4xl font-normal text-surface-on font-display tracking-tight">Settings</h2>

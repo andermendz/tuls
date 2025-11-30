@@ -3,10 +3,11 @@ import { FileData } from '../types';
 import { FileUpload } from '../components/ui/FileUpload';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { downloadBlob, resizeImage } from '../utils/imageUtils'; // Import resizeImage
+import { downloadBlob, resizeImage } from '../utils/imageUtils';
 import { Eraser, Download, RefreshCw, Layers, Loader2, Sparkles, ShieldCheck, Zap, Lock, Eye, EyeOff } from 'lucide-react';
 import { removeBackground } from '@imgly/background-removal';
 import { clsx } from 'clsx';
+import { SEO } from '../components/SEO';
 
 export const BackgroundRemoverTool: React.FC = () => {
     const [fileData, setFileData] = useState<FileData | null>(null);
@@ -60,6 +61,12 @@ export const BackgroundRemoverTool: React.FC = () => {
     if (!fileData) {
         return (
             <div className="max-w-4xl mx-auto space-y-8 animate-slide-up">
+                <SEO
+                    title="Free Background Remover"
+                    description="Remove image backgrounds instantly using AI directly in your browser. 100% private, no uploads, and free to use."
+                    canonical="/image/bg-remover"
+                    keywords={['background remover', 'remove bg', 'transparent background', 'ai background removal', 'free image tool']}
+                />
                 <div className="text-center md:text-left space-y-4 mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 text-sm font-medium">
                         <Eraser size={16} />
@@ -92,6 +99,7 @@ export const BackgroundRemoverTool: React.FC = () => {
 
     return (
         <div className="max-w-6xl mx-auto animate-fade-in pb-20 md:pb-0">
+            <SEO title="Removing Background..." description="Processing your image to remove the background." />
             <style>{`
         @keyframes scan-material {
           0% { top: 0%; opacity: 0; }
@@ -151,7 +159,7 @@ export const BackgroundRemoverTool: React.FC = () => {
                             </div>
                         )}
 
-                        {/* Material Segmented Button Toggle - UPDATED POSITIONING (Bottom Right) */}
+                        {/* Material Segmented Button Toggle */}
                         {processedUrl && !isProcessing && (
                             <div className="absolute bottom-4 right-4 z-20 animate-m3-slide-up max-w-[calc(100%-2rem)]">
                                 <div className="flex p-1 rounded-full bg-surface-container-high shadow-m3-2 overflow-hidden">

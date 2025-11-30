@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { compressImage, downloadBlob, formatBytes } from '../utils/imageUtils';
 import { Download, RefreshCw, Sliders, TrendingDown, Loader2, Zap, Image as ImageIcon, Gauge, Settings2, Check, Eye, EyeOff } from 'lucide-react';
 import { clsx } from 'clsx';
+import { SEO } from '../components/SEO';
 
 const PRESETS = [
   {
@@ -102,6 +103,12 @@ export const CompressorTool: React.FC = () => {
   if (!fileData) {
     return (
       <div className="max-w-4xl mx-auto space-y-8 animate-slide-up">
+        <SEO
+          title="Image Compressor"
+          description="Compress JPG, PNG, and WebP images online for free. Reduce file size without losing quality. 100% client-side privacy."
+          canonical="/image/compressor"
+          keywords={['image compressor', 'reduce image size', 'optimize images', 'compress jpg', 'compress png']}
+        />
         <div className="text-center md:text-left space-y-4 mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-google-yellow/10 text-yellow-700 dark:text-google-yellow text-sm font-medium">
             <TrendingDown size={16} />
@@ -121,6 +128,7 @@ export const CompressorTool: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto animate-fade-in pb-20 md:pb-0">
+      <SEO title="Compressing Image..." description="Optimizing your image..." />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Preview Area */}
         <Card variant="elevated" className="lg:col-span-2 p-4 flex flex-col min-h-[400px] md:min-h-[500px]">
@@ -162,7 +170,7 @@ export const CompressorTool: React.FC = () => {
               </div>
             )}
 
-            {/* View Toggle - UPDATED POSITIONING (Bottom Right) */}
+            {/* View Toggle */}
             <div className="absolute bottom-4 right-4 z-20 animate-m3-slide-up max-w-[calc(100%-2rem)]">
               <div className="flex p-1 rounded-full bg-surface-container-high shadow-m3-2 overflow-hidden">
                 <button
@@ -194,7 +202,7 @@ export const CompressorTool: React.FC = () => {
               </div>
             </div>
 
-            {/* Current View Label - UPDATED STYLING */}
+            {/* Current View Label */}
             <div className="absolute top-4 left-4 z-20">
               <span className="px-3 py-1.5 rounded-m3 bg-surface-container-high text-surface-on text-xs font-medium shadow-sm">
                 {viewMode === 'original' ? 'Original' : 'Compressed Result'}
