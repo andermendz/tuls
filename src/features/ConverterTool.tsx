@@ -7,6 +7,7 @@ import { convertImageFormat, downloadBlob } from '../utils/imageUtils';
 import { FileOutput, ArrowRight, RefreshCw, Loader2, Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 const FORMATS = [
   { mime: 'image/jpeg', label: 'JPEG', ext: 'jpg', desc: 'Best for photos' },
@@ -57,6 +58,28 @@ export const ConverterTool: React.FC = () => {
           </p>
         </div>
         <FileUpload onFileSelect={setFileData} />
+
+        <ToolContent
+          title="Image Conversion"
+          sections={[
+            {
+              title: "Modern Formats",
+              content: "Convert older formats to modern WebP for better web performance, or convert WebP back to JPG/PNG for compatibility with older software."
+            },
+            {
+              title: "Lossless vs Lossy",
+              content: "PNG is lossless (perfect quality, larger size). JPG is lossy (smaller size, good for photos). WebP offers the best balance of both worlds."
+            },
+            {
+              title: "Batch Processing",
+              content: "Currently, we process one image at a time to ensure maximum privacy and browser performance. Batch processing is coming in a future update."
+            },
+            {
+              title: "Secure Conversion",
+              content: "All conversions happen in your browser memory. We don't store or see your files, making this the safest way to convert sensitive documents or photos."
+            }
+          ]}
+        />
       </div>
     );
   }

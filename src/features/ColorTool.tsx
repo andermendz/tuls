@@ -7,6 +7,7 @@ import { extractColors, Color, getContrastColor, copyToClipboard } from '../util
 import { Palette, RefreshCw, Copy, Check, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 export const ColorTool: React.FC = () => {
     const [fileData, setFileData] = useState<FileData | null>(null);
@@ -62,6 +63,28 @@ export const ColorTool: React.FC = () => {
                     </p>
                 </div>
                 <FileUpload onFileSelect={setFileData} />
+
+                <ToolContent
+                    title="Palette Generation"
+                    sections={[
+                        {
+                            title: "Color Extraction",
+                            content: "We use quantization algorithms to analyze your image and find the dominant colors, grouping similar shades to create a cohesive palette."
+                        },
+                        {
+                            title: "For Designers",
+                            content: "Perfect for web designers and artists looking for inspiration. Extract a color scheme from a photo you love and use the hex codes in your projects."
+                        },
+                        {
+                            title: "Accessibility",
+                            content: "We automatically calculate contrast ratios to ensure the text on the color cards is readable, helping you spot accessible color combinations."
+                        },
+                        {
+                            title: "Instant Export",
+                            content: "Click any color card to instantly copy the Hex code to your clipboard. No need to manually type out codes."
+                        }
+                    ]}
+                />
             </div>
         );
     }

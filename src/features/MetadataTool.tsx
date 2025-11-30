@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { getExifData, scrubMetadata, downloadBlob } from '../utils/imageUtils';
 import { ShieldCheck, Info, RefreshCw, AlertTriangle, ScanLine, Loader2, Camera, MapPin, Calendar } from 'lucide-react';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 export const MetadataTool: React.FC = () => {
   const [fileData, setFileData] = useState<FileData | null>(null);
@@ -99,6 +100,28 @@ export const MetadataTool: React.FC = () => {
           </p>
         </div>
         <FileUpload onFileSelect={setFileData} />
+
+        <ToolContent
+          title="EXIF Metadata"
+          sections={[
+            {
+              title: "What is EXIF?",
+              content: "EXIF (Exchangeable Image File Format) data is hidden information stored in photos. It can include camera model, settings, date taken, and even precise GPS location."
+            },
+            {
+              title: "Why Remove It?",
+              content: "Sharing photos with GPS data online can reveal your home address or daily habits. Scrubbing metadata protects your privacy before posting to social media."
+            },
+            {
+              title: "What We Remove",
+              content: "Our scrubbing tool removes GPS coordinates, camera details, software information, and thumbnails, leaving just the visual image data intact."
+            },
+            {
+              title: "Non-Destructive",
+              content: "The scrubbing process creates a new copy of your image. Your original file on your device remains untouched and unchanged."
+            }
+          ]}
+        />
       </div>
     );
   }

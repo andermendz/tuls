@@ -8,6 +8,7 @@ import { Eraser, Download, RefreshCw, Layers, Loader2, Sparkles, ShieldCheck, Za
 import { removeBackground } from '@imgly/background-removal';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 export const BackgroundRemoverTool: React.FC = () => {
     const [fileData, setFileData] = useState<FileData | null>(null);
@@ -93,6 +94,28 @@ export const BackgroundRemoverTool: React.FC = () => {
                     </div>
                 </div>
                 <FileUpload onFileSelect={setFileData} />
+
+                <ToolContent
+                    title="Background Removal"
+                    sections={[
+                        {
+                            title: "AI Technology",
+                            content: "We use advanced machine learning models (RMBG v1.4) running directly in your browser via WebAssembly. This allows for precise subject detection without server-side processing."
+                        },
+                        {
+                            title: "Best Practices",
+                            content: "For the best results, use images where the subject is clearly distinguished from the background. High contrast and good lighting help the AI detect edges more accurately."
+                        },
+                        {
+                            title: "Unlimited & Free",
+                            content: "Remove backgrounds from as many images as you like. There are no credits, subscriptions, or hidden fees. It's completely free to use."
+                        },
+                        {
+                            title: "Data Privacy",
+                            content: "Your images are processed locally on your device's CPU/GPU. No image data is ever sent to the cloud, making it safe for sensitive or personal photos."
+                        }
+                    ]}
+                />
             </div>
         );
     }

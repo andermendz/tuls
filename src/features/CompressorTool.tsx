@@ -7,6 +7,7 @@ import { compressImage, downloadBlob, formatBytes } from '../utils/imageUtils';
 import { Download, RefreshCw, Sliders, TrendingDown, Loader2, Zap, Image as ImageIcon, Gauge, Settings2, Check, Eye, EyeOff } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 const PRESETS = [
   {
@@ -122,6 +123,28 @@ export const CompressorTool: React.FC = () => {
           </p>
         </div>
         <FileUpload onFileSelect={setFileData} />
+
+        <ToolContent
+          title="Image Compression"
+          sections={[
+            {
+              title: "How it works",
+              content: "Our smart compressor analyzes your image and selectively reduces the number of colors and removes redundant data. This significantly reduces file size without a noticeable change in quality."
+            },
+            {
+              title: "Privacy First",
+              content: "Unlike other tools, Tuls runs entirely in your browser. Your photos are never uploaded to a server, ensuring 100% privacy and security for your personal data."
+            },
+            {
+              title: "Supported Formats",
+              content: "We support compression for JPG, PNG, and WebP formats. The tool automatically detects the best compression algorithm for your specific file type."
+            },
+            {
+              title: "Why Compress?",
+              content: "Compressed images load faster on websites, take up less storage space on your devices, and are easier to share via email or social media platforms."
+            }
+          ]}
+        />
       </div>
     );
   }

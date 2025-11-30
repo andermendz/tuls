@@ -137,7 +137,7 @@ export const Settings: React.FC<SettingsProps> = ({ theme, onThemeChange }) => {
           Made with <Heart size={14} className="text-google-red fill-google-red" /> using Material You
         </p>
         <p className="text-xs text-surface-onVariant/60">
-          © 2024 Tuls
+          © 2025 Tuls
         </p>
       </div>
     </div>

@@ -1,11 +1,12 @@
 import React, { useState, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Removed Navigate
 import { HelmetProvider } from 'react-helmet-async';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound'; // Import NotFound
 import { Loader2 } from 'lucide-react';
 
-// Lazy load features for performance (Code Splitting)
+// ... (Keep existing lazy imports)
 const MetadataTool = React.lazy(() => import('./features/MetadataTool').then(module => ({ default: module.MetadataTool })));
 const ConverterTool = React.lazy(() => import('./features/ConverterTool').then(module => ({ default: module.ConverterTool })));
 const CompressorTool = React.lazy(() => import('./features/CompressorTool').then(module => ({ default: module.CompressorTool })));
@@ -30,36 +31,19 @@ const App: React.FC = () => {
           <Route path="/" element={<Layout theme={theme} setTheme={setTheme} />}>
             <Route index element={<Home />} />
 
-            {/* Scalable Route Structure: /image/* for image tools */}
             <Route path="image">
-              <Route path="compressor" element={
-                <Suspense fallback={<LoadingFallback />}><CompressorTool /></Suspense>
-              } />
-              <Route path="converter" element={
-                <Suspense fallback={<LoadingFallback />}><ConverterTool /></Suspense>
-              } />
-              <Route path="cropper" element={
-                <Suspense fallback={<LoadingFallback />}><CropperTool /></Suspense>
-              } />
-              <Route path="metadata" element={
-                <Suspense fallback={<LoadingFallback />}><MetadataTool /></Suspense>
-              } />
-              <Route path="palette" element={
-                <Suspense fallback={<LoadingFallback />}><ColorTool /></Suspense>
-              } />
-              <Route path="bg-remover" element={
-                <Suspense fallback={<LoadingFallback />}><BackgroundRemoverTool /></Suspense>
-              } />
+              <Route path="compressor" element={<Suspense fallback={<LoadingFallback />}><CompressorTool /></Suspense>} />
+              <Route path="converter" element={<Suspense fallback={<LoadingFallback />}><ConverterTool /></Suspense>} />
+              <Route path="cropper" element={<Suspense fallback={<LoadingFallback />}><CropperTool /></Suspense>} />
+              <Route path="metadata" element={<Suspense fallback={<LoadingFallback />}><MetadataTool /></Suspense>} />
+              <Route path="palette" element={<Suspense fallback={<LoadingFallback />}><ColorTool /></Suspense>} />
+              <Route path="bg-remover" element={<Suspense fallback={<LoadingFallback />}><BackgroundRemoverTool /></Suspense>} />
             </Route>
 
-            {/* Future Proofing: You can add /pdf/* or /text/* routes here later */}
+            <Route path="settings" element={<Suspense fallback={<LoadingFallback />}><Settings theme={theme} onThemeChange={setTheme} /></Suspense>} />
 
-            <Route path="settings" element={
-              <Suspense fallback={<LoadingFallback />}><Settings theme={theme} onThemeChange={setTheme} /></Suspense>
-            } />
-
-            {/* Catch all - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Updated 404 Handling */}
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>

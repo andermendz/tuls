@@ -8,6 +8,7 @@ import { getCroppedImg, downloadBlob } from '../utils/imageUtils';
 import { Crop, Download, RefreshCw, Monitor, Smartphone, Square, RectangleHorizontal, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { ToolContent } from '../components/ui/ToolContent';
 
 const ASPECT_OPTIONS = [
   { value: undefined, label: 'Free', icon: Crop },
@@ -65,6 +66,28 @@ export const CropperTool: React.FC = () => {
           </p>
         </div>
         <FileUpload onFileSelect={setFileData} />
+
+        <ToolContent
+          title="Image Cropping"
+          sections={[
+            {
+              title: "Pixel Precision",
+              content: "Crop your images with exact pixel dimensions. Perfect for creating profile pictures, banners, or fitting images into specific layout requirements."
+            },
+            {
+              title: "Aspect Ratios",
+              content: "Use our presets for common social media formats (1:1 for Instagram, 16:9 for YouTube) or use Free mode to crop exactly how you want."
+            },
+            {
+              title: "High Quality Output",
+              content: "We use high-quality canvas resampling to ensure your cropped image remains sharp and clear, avoiding the blurriness common in other online tools."
+            },
+            {
+              title: "Local Processing",
+              content: "Large images are cropped directly in your browser memory. This is much faster than uploading huge files to a server just to crop a small section."
+            }
+          ]}
+        />
       </div>
     );
   }
