@@ -1,0 +1,5 @@
+{
+  "name": "Tuls - Image Utility Platform",
+  "description": "A privacy-first, client-side image utility suite featuring metadata scrubbing, format conversion, compression, and cropping with a Material You aesthetic.",
+  "requestFramePermissions": []
+}
