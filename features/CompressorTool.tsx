@@ -123,7 +123,7 @@ export const CompressorTool: React.FC = () => {
     <div className="max-w-6xl mx-auto animate-fade-in pb-20 md:pb-0">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Preview Area */}
-        <Card variant="elevated" className="lg:col-span-2 p-4 flex flex-col min-h-[500px]">
+        <Card variant="elevated" className="lg:col-span-2 p-4 flex flex-col min-h-[400px] md:min-h-[500px]">
           <div className="flex-1 flex items-center justify-center bg-surface-container-low rounded-m3-lg overflow-hidden relative group">
 
             {/* Checkerboard Background */}
@@ -155,49 +155,49 @@ export const CompressorTool: React.FC = () => {
             {/* Loading Indicator Overlay */}
             {isProcessing && (
               <div className="absolute inset-0 z-20 flex items-center justify-center">
-                <div className="bg-surface-container-high/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-m3-2 flex items-center gap-3">
+                <div className="bg-surface-container-high shadow-m3-2 px-6 py-3 rounded-full flex items-center gap-3">
                   <Loader2 size={20} className="animate-spin text-primary" />
                   <span className="font-medium text-surface-on">Optimizing...</span>
                 </div>
               </div>
             )}
 
-            {/* Comparison Toggle */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-m3-slide-up">
-              <div className="flex p-1.5 rounded-full bg-surface-container-high/90 backdrop-blur shadow-m3-2 border border-outline-variant/20">
+            {/* View Toggle - UPDATED POSITIONING (Bottom Right) */}
+            <div className="absolute bottom-4 right-4 z-20 animate-m3-slide-up max-w-[calc(100%-2rem)]">
+              <div className="flex p-1 rounded-full bg-surface-container-high shadow-m3-2 overflow-hidden">
                 <button
                   onClick={() => setViewMode('original')}
                   className={clsx(
-                    "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    "flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex-1 sm:flex-none whitespace-nowrap",
                     viewMode === 'original'
-                      ? "bg-surface text-surface-on shadow-sm"
+                      ? "bg-secondary-container text-secondary-onContainer shadow-sm"
                       : "text-surface-onVariant hover:text-surface-on hover:bg-surface-on/5"
                   )}
                 >
-                  <Eye size={16} />
+                  <Eye size={16} className="shrink-0" />
                   Original
                 </button>
                 <button
                   onClick={() => setViewMode('compressed')}
                   disabled={!compressedUrl}
                   className={clsx(
-                    "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    "flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex-1 sm:flex-none whitespace-nowrap",
                     viewMode === 'compressed'
-                      ? "bg-surface text-surface-on shadow-sm"
+                      ? "bg-secondary-container text-secondary-onContainer shadow-sm"
                       : "text-surface-onVariant hover:text-surface-on hover:bg-surface-on/5",
                     !compressedUrl && "opacity-50 cursor-not-allowed"
                   )}
                 >
-                  <EyeOff size={16} />
+                  <EyeOff size={16} className="shrink-0" />
                   Compressed
                 </button>
               </div>
             </div>
 
-            {/* Current View Label (Top Left) */}
+            {/* Current View Label - UPDATED STYLING */}
             <div className="absolute top-4 left-4 z-20">
-              <span className="px-3 py-1.5 rounded-md bg-black/50 text-white text-xs font-medium backdrop-blur-sm">
-                Showing: {viewMode === 'original' ? 'Original' : 'Compressed Result'}
+              <span className="px-3 py-1.5 rounded-m3 bg-surface-container-high text-surface-on text-xs font-medium shadow-sm">
+                {viewMode === 'original' ? 'Original' : 'Compressed Result'}
               </span>
             </div>
           </div>

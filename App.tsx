@@ -12,14 +12,14 @@ import {
   Sparkles,
   Zap,
   Palette,
-  Eraser // Import Eraser icon
+  Eraser
 } from 'lucide-react';
 import { MetadataTool } from './features/MetadataTool';
 import { ConverterTool } from './features/ConverterTool';
 import { CompressorTool } from './features/CompressorTool';
 import { CropperTool } from './features/CropperTool';
 import { ColorTool } from './features/ColorTool';
-import { BackgroundRemoverTool } from './features/BackgroundRemoverTool'; // Import Component
+import { BackgroundRemoverTool } from './features/BackgroundRemoverTool';
 import { Settings } from './features/Settings';
 import { ToolType } from './types';
 
@@ -197,38 +197,41 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface/95 backdrop-blur-lg z-50 flex items-center justify-between px-4 shadow-sm">
+      {/* Mobile Header - Taller with more spacing */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-20 pt-2 bg-surface z-40 flex items-center justify-between px-6 shadow-sm transition-colors duration-200">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-m3-sm bg-primary flex items-center justify-center shadow-sm">
             <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15.5c-3.04 0-5.5-2.46-5.5-5.5s2.46-5.5 5.5-5.5 5.5 2.46 5.5 5.5-2.46 5.5-5.5 5.5zm3.5-6h-3V9c0-.28-.22-.5-.5-.5s-.5.22-.5.5v4c0 .28.22.5.5.5h3.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5z" />
             </svg>
           </div>
-          <span className="font-medium text-lg text-surface-on font-display">Tuls</span>
+          <span className="font-medium text-xl text-surface-on font-display tracking-tight">Tuls</span>
         </div>
+
+        {/* Menu Toggle - Top Right - Floating Card Style (Squared with Rounded Corners) */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="w-10 h-10 flex items-center justify-center text-surface-on rounded-full hover:bg-surface-container active:bg-surface-container-high transition-colors m3-ripple"
+          className="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-highest text-surface-onVariant shadow-m3-1 hover:bg-surface-container hover:shadow-m3-2 active:scale-95 transition-all duration-200 m3-ripple"
+          aria-label="Open menu"
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          <Menu size={24} />
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Drawer Overlay (Scrim) - Solid color with opacity, no blur */}
       {mobileMenuOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black/30 z-40 animate-fade-in"
+          className="md:hidden fixed inset-0 bg-black/40 z-50 animate-fade-in"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer - Solid Surface */}
       <div className={clsx(
-        "md:hidden fixed top-0 left-0 bottom-0 w-72 bg-surface-container-low z-50 transform transition-transform duration-300 ease-out shadow-m3-4",
+        "md:hidden fixed top-0 left-0 bottom-0 w-[85vw] max-w-[320px] bg-surface-container-low z-[51] transform transition-transform duration-300 ease-out shadow-m3-4 rounded-r-m3-xl flex flex-col",
         mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="p-4">
+        <div className="p-4 min-h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-m3 bg-primary flex items-center justify-center shadow-m3-1">
               <svg viewBox="0 0 24 24" className="w-6 h-6 text-white" fill="currentColor">
@@ -240,23 +243,30 @@ const App: React.FC = () => {
               <span className="text-xs text-surface-onVariant">Utility Platform</span>
             </div>
           </div>
+
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-10 h-10 flex items-center justify-center text-surface-onVariant rounded-full hover:bg-surface-container active:bg-surface-container-high m3-ripple"
+          >
+            <X size={24} />
+          </button>
         </div>
 
-        <div className="p-2 overflow-y-auto h-[calc(100%-80px)]">
+        <div className="px-3 py-2 overflow-y-auto flex-1">
           <button
             onClick={() => { setActiveTool('dashboard'); setMobileMenuOpen(false); }}
             className={clsx(
-              "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
+              "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 mb-2 m3-ripple transition-all",
               activeTool === 'dashboard'
                 ? "bg-secondary-container text-secondary-onContainer font-medium"
-                : "text-surface-onVariant hover:bg-surface-on/5"
+                : "text-surface-onVariant hover:bg-surface-container-high"
             )}
           >
             <LayoutDashboard size={24} />
-            <span className="font-medium text-sm">Home</span>
+            <span className="font-medium text-sm">Dashboard</span>
           </button>
 
-          <div className="mt-4 mb-2 px-4">
+          <div className="my-3 px-4 border-t border-outline-variant/30 pt-3">
             <span className="text-sm font-medium text-surface-onVariant">Tools</span>
           </div>
 
@@ -268,7 +278,7 @@ const App: React.FC = () => {
                 "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
                 activeTool === tool.id
                   ? "bg-secondary-container text-secondary-onContainer font-medium"
-                  : "text-surface-onVariant hover:bg-surface-on/5"
+                  : "text-surface-onVariant hover:bg-surface-container-high"
               )}
             >
               <tool.icon size={24} />
@@ -276,25 +286,27 @@ const App: React.FC = () => {
             </button>
           ))}
 
-          <div className="mt-4 pt-4">
-            <button
-              onClick={() => { setActiveTool('settings'); setMobileMenuOpen(false); }}
-              className={clsx(
-                "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 m3-ripple transition-all",
-                activeTool === 'settings'
-                  ? "bg-secondary-container text-secondary-onContainer font-medium"
-                  : "text-surface-onVariant hover:bg-surface-on/5"
-              )}
-            >
-              <SettingsIcon size={24} />
-              <span className="font-medium text-sm">Settings</span>
-            </button>
+          <div className="my-3 px-4 border-t border-outline-variant/30 pt-3">
+            <span className="text-sm font-medium text-surface-onVariant">App</span>
           </div>
+
+          <button
+            onClick={() => { setActiveTool('settings'); setMobileMenuOpen(false); }}
+            className={clsx(
+              "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 m3-ripple transition-all",
+              activeTool === 'settings'
+                ? "bg-secondary-container text-secondary-onContainer font-medium"
+                : "text-surface-onVariant hover:bg-surface-container-high"
+            )}
+          >
+            <SettingsIcon size={24} />
+            <span className="font-medium text-sm">Settings</span>
+          </button>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 relative overflow-hidden flex flex-col pt-16 md:pt-0">
+      <main className="flex-1 relative overflow-hidden flex flex-col pt-20 md:pt-0">
         <div className="md:p-4 md:pl-0 flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 md:rounded-m3-xl md:bg-surface-container overflow-hidden md:shadow-m3-1">
             <div key={activeTool} className="h-full overflow-y-auto p-4 md:p-8 lg:p-10 scroll-smooth bg-surface md:bg-transparent">

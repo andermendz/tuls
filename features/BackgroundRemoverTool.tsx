@@ -134,7 +134,7 @@ export const BackgroundRemoverTool: React.FC = () => {
 
                         {/* Material Design Processing State */}
                         {isProcessing && (
-                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface-container-lowest/50 backdrop-blur-[2px]">
+                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface-container-lowest">
                                 {/* Subtle Scan Line */}
                                 <div className="absolute inset-x-0 h-0.5 bg-primary/80 animate-scan-material z-10" />
 
@@ -151,14 +151,14 @@ export const BackgroundRemoverTool: React.FC = () => {
                             </div>
                         )}
 
-                        {/* Material Segmented Button Toggle */}
+                        {/* Material Segmented Button Toggle - UPDATED POSITIONING (Bottom Right) */}
                         {processedUrl && !isProcessing && (
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-m3-slide-up">
-                                <div className="flex p-1 rounded-full bg-surface-container-high shadow-m3-2">
+                            <div className="absolute bottom-4 right-4 z-20 animate-m3-slide-up max-w-[calc(100%-2rem)]">
+                                <div className="flex p-1 rounded-full bg-surface-container-high shadow-m3-2 overflow-hidden">
                                     <button
                                         onClick={() => setViewMode('original')}
                                         className={clsx(
-                                            "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                                            "flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
                                             viewMode === 'original'
                                                 ? "bg-secondary-container text-secondary-onContainer shadow-sm"
                                                 : "text-surface-onVariant hover:text-surface-on hover:bg-surface-on/5"
@@ -170,7 +170,7 @@ export const BackgroundRemoverTool: React.FC = () => {
                                     <button
                                         onClick={() => setViewMode('removed')}
                                         className={clsx(
-                                            "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                                            "flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
                                             viewMode === 'removed'
                                                 ? "bg-secondary-container text-secondary-onContainer shadow-sm"
                                                 : "text-surface-onVariant hover:text-surface-on hover:bg-surface-on/5"

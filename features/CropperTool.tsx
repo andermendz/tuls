@@ -11,9 +11,9 @@ import { clsx } from 'clsx';
 const ASPECT_OPTIONS = [
   { value: undefined, label: 'Free', icon: Crop },
   { value: 1, label: '1:1', icon: Square },
-  { value: 16/9, label: '16:9', icon: Monitor },
-  { value: 4/5, label: '4:5', icon: Smartphone },
-  { value: 4/3, label: '4:3', icon: RectangleHorizontal },
+  { value: 16 / 9, label: '16:9', icon: Monitor },
+  { value: 4 / 5, label: '4:5', icon: Smartphone },
+  { value: 4 / 3, label: '4:3', icon: RectangleHorizontal },
 ];
 
 export const CropperTool: React.FC = () => {
@@ -63,9 +63,9 @@ export const CropperTool: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] md:h-[calc(100vh-100px)] animate-fade-in">
-      {/* Cropper Container */}
-      <div className="relative flex-1 bg-surface-container-high rounded-m3-xl overflow-hidden mb-4 min-h-[300px]">
+    <div className="flex flex-col h-auto min-h-screen md:h-[calc(100vh-100px)] animate-fade-in pb-20 md:pb-0">
+      {/* Cropper Container - Flexible height on mobile, flex-1 on desktop */}
+      <div className="relative w-full h-[50vh] md:h-auto md:flex-1 bg-surface-container-high rounded-m3-xl overflow-hidden mb-4 shrink-0">
         <Cropper
           image={fileData.previewUrl}
           crop={crop}
@@ -75,10 +75,10 @@ export const CropperTool: React.FC = () => {
           onZoomChange={setZoom}
           onCropComplete={onCropComplete}
           style={{
-            containerStyle: { 
+            containerStyle: {
               background: 'var(--color-surface-container-high)',
             },
-            cropAreaStyle: { 
+            cropAreaStyle: {
               border: '2px solid white',
               borderRadius: '4px',
               boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)'
@@ -88,10 +88,10 @@ export const CropperTool: React.FC = () => {
       </div>
 
       {/* Controls */}
-      <Card variant="elevated" className="p-4">
-        <div className="flex flex-col md:flex-row gap-6 items-center">
+      <Card variant="elevated" className="p-4 shrink-0">
+        <div className="flex flex-col lg:flex-row gap-6 items-center">
           {/* Aspect Ratio Chips */}
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full overflow-hidden">
             <label className="text-xs font-medium text-surface-onVariant uppercase tracking-wider mb-3 block">
               Aspect Ratio
             </label>
@@ -100,11 +100,11 @@ export const CropperTool: React.FC = () => {
                 const Icon = opt.icon;
                 const isActive = aspect === opt.value;
                 return (
-                  <button 
+                  <button
                     key={opt.label}
                     onClick={() => setAspect(opt.value)}
                     className={clsx(
-                      "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap",
+                      "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap shrink-0",
                       isActive
                         ? "bg-primary text-white shadow-m3-1"
                         : "bg-surface-container text-surface-onVariant hover:bg-surface-container-high"
@@ -119,7 +119,7 @@ export const CropperTool: React.FC = () => {
           </div>
 
           {/* Zoom Slider */}
-          <div className="w-full md:w-56">
+          <div className="w-full lg:w-56">
             <label className="text-xs font-medium text-surface-onVariant uppercase tracking-wider mb-3 block">
               Zoom: {zoom.toFixed(1)}×
             </label>
@@ -130,22 +130,23 @@ export const CropperTool: React.FC = () => {
               max={3}
               step={0.1}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="w-full"
+              className="w-full accent-primary h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 shrink-0">
-            <Button 
-              variant="outlined" 
+          <div className="flex w-full lg:w-auto gap-3 shrink-0 pt-2 lg:pt-0">
+            <Button
+              variant="outlined"
               onClick={() => setFileData(null)}
               className="px-4"
             >
               <RefreshCw size={18} />
             </Button>
-            <Button 
-              onClick={handleDownload} 
+            <Button
+              onClick={handleDownload}
               disabled={isProcessing}
+              className="flex-1 lg:flex-none"
               icon={isProcessing ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
             >
               {isProcessing ? 'Processing...' : 'Save Crop'}
