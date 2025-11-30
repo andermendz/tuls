@@ -108,7 +108,7 @@ export const Settings: React.FC<SettingsProps> = ({ theme, onThemeChange }) => {
 
         <div className="p-5 space-y-4">
           <p className="text-surface-onVariant leading-relaxed">
-            Tuls is a privacy-first image processing tool. All operations happen locally in your browser — your files never leave your device.
+            Tuls is a privacy-first utility platform. All operations happen locally in your browser — your files never leave your device.
           </p>
 
           <div className="flex flex-wrap gap-2">
@@ -131,7 +131,7 @@ export const Settings: React.FC<SettingsProps> = ({ theme, onThemeChange }) => {
           Made with <Heart size={14} className="text-google-red fill-google-red" /> using Material You
         </p>
         <p className="text-xs text-surface-onVariant/60">
-          © 2024 Tuls Image Studio
+          © 2024 Tuls
         </p>
       </div>
     </div>

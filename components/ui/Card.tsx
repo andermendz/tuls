@@ -17,8 +17,8 @@ export const Card: React.FC<CardProps> = ({
   variant = 'filled'
 }) => {
   const variants = {
-    filled: "bg-surface-container-low",
-    elevated: "bg-surface-container-lowest shadow-m3-1 hover:shadow-m3-2",
+    filled: "bg-surface-container-highest",
+    elevated: "bg-surface-container-low shadow-m3-1 hover:shadow-m3-2 m3-surface-tint",
     outlined: "bg-surface border border-outline-variant/40",
   };
 

@@ -10,12 +10,14 @@ import {
   X,
   Settings as SettingsIcon,
   Sparkles,
-  Zap
+  Zap,
+  Palette
 } from 'lucide-react';
 import { MetadataTool } from './features/MetadataTool';
 import { ConverterTool } from './features/ConverterTool';
 import { CompressorTool } from './features/CompressorTool';
 import { CropperTool } from './features/CropperTool';
+import { ColorTool } from './features/ColorTool';
 import { Settings } from './features/Settings';
 import { ToolType } from './types';
 
@@ -57,6 +59,7 @@ const App: React.FC = () => {
     { id: 'converter', name: 'Converter', icon: ArrowRightLeft, desc: 'Change image formats', color: 'bg-google-red' },
     { id: 'compressor', name: 'Compressor', icon: Minimize2, desc: 'Reduce file size', color: 'bg-google-yellow' },
     { id: 'cropper', name: 'Cropper', icon: Crop, desc: 'Resize & crop images', color: 'bg-google-green' },
+    { id: 'palette', name: 'Palette', icon: Palette, desc: 'Extract color schemes', color: 'bg-purple-500' },
   ];
 
   const renderContent = () => {
@@ -65,6 +68,7 @@ const App: React.FC = () => {
       case 'converter': return <ConverterTool />;
       case 'compressor': return <CompressorTool />;
       case 'cropper': return <CropperTool />;
+      case 'palette': return <ColorTool />;
       case 'settings': return <Settings theme={theme} onThemeChange={setTheme} />;
       default: return (
         <div className="max-w-5xl mx-auto py-6 md:py-12 animate-slide-up px-4">
@@ -159,12 +163,12 @@ const App: React.FC = () => {
           <NavButton
             active={activeTool === 'dashboard'}
             onClick={() => setActiveTool('dashboard')}
-            icon={<LayoutDashboard size={22} />}
+            icon={<LayoutDashboard size={24} />}
             label="Dashboard"
           />
 
           <div className="mt-6 mb-2 px-4">
-            <span className="text-[11px] font-semibold text-surface-onVariant/70 uppercase tracking-widest">Utilities</span>
+            <span className="text-sm font-medium text-surface-onVariant">Utilities</span>
           </div>
 
           {tools.map(tool => (
@@ -172,7 +176,7 @@ const App: React.FC = () => {
               key={tool.id}
               active={activeTool === tool.id}
               onClick={() => setActiveTool(tool.id as ToolType)}
-              icon={<tool.icon size={22} />}
+              icon={<tool.icon size={24} />}
               label={tool.name}
               color={tool.color}
             />
@@ -182,7 +186,7 @@ const App: React.FC = () => {
             <NavButton
               active={activeTool === 'settings'}
               onClick={() => setActiveTool('settings')}
-              icon={<SettingsIcon size={22} />}
+              icon={<SettingsIcon size={24} />}
               label="Settings"
             />
           </div>
@@ -229,7 +233,7 @@ const App: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-medium text-surface-on font-display">Tuls</span>
-              <span className="text-xs text-surface-onVariant">Image Studio</span>
+              <span className="text-xs text-surface-onVariant">Utility Platform</span>
             </div>
           </div>
         </div>
@@ -238,18 +242,18 @@ const App: React.FC = () => {
           <button
             onClick={() => { setActiveTool('dashboard'); setMobileMenuOpen(false); }}
             className={clsx(
-              "w-full p-4 rounded-m3-lg text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
+              "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
               activeTool === 'dashboard'
-                ? "bg-primary-container text-primary-onContainer"
-                : "text-surface-on hover:bg-surface-container"
+                ? "bg-secondary-container text-secondary-onContainer font-medium"
+                : "text-surface-onVariant hover:bg-surface-on/5"
             )}
           >
-            <LayoutDashboard size={22} />
-            <span className="font-medium">Home</span>
+            <LayoutDashboard size={24} />
+            <span className="font-medium text-sm">Home</span>
           </button>
 
           <div className="mt-4 mb-2 px-4">
-            <span className="text-xs font-medium text-surface-onVariant uppercase tracking-wider">Tools</span>
+            <span className="text-sm font-medium text-surface-onVariant">Tools</span>
           </div>
 
           {tools.map(tool => (
@@ -257,14 +261,14 @@ const App: React.FC = () => {
               key={tool.id}
               onClick={() => { setActiveTool(tool.id as ToolType); setMobileMenuOpen(false); }}
               className={clsx(
-                "w-full p-4 rounded-m3-lg text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
+                "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 mb-1 m3-ripple transition-all",
                 activeTool === tool.id
-                  ? "bg-primary-container text-primary-onContainer"
-                  : "text-surface-on hover:bg-surface-container"
+                  ? "bg-secondary-container text-secondary-onContainer font-medium"
+                  : "text-surface-onVariant hover:bg-surface-on/5"
               )}
             >
-              <tool.icon size={22} />
-              <span className="font-medium">{tool.name}</span>
+              <tool.icon size={24} />
+              <span className="font-medium text-sm">{tool.name}</span>
             </button>
           ))}
 
@@ -272,14 +276,14 @@ const App: React.FC = () => {
             <button
               onClick={() => { setActiveTool('settings'); setMobileMenuOpen(false); }}
               className={clsx(
-                "w-full p-4 rounded-m3-lg text-left flex items-center gap-4 m3-ripple transition-all",
+                "w-full h-14 px-4 rounded-full text-left flex items-center gap-4 m3-ripple transition-all",
                 activeTool === 'settings'
-                  ? "bg-primary-container text-primary-onContainer"
-                  : "text-surface-on hover:bg-surface-container"
+                  ? "bg-secondary-container text-secondary-onContainer font-medium"
+                  : "text-surface-onVariant hover:bg-surface-on/5"
               )}
             >
-              <SettingsIcon size={22} />
-              <span className="font-medium">Settings</span>
+              <SettingsIcon size={24} />
+              <span className="font-medium text-sm">Settings</span>
             </button>
           </div>
         </div>
@@ -309,10 +313,10 @@ const NavButton: React.FC<{
   <button
     onClick={onClick}
     className={clsx(
-      "flex items-center gap-4 px-5 py-3.5 rounded-full transition-all duration-200 w-full text-left m3-ripple group",
+      "flex items-center gap-4 px-4 h-14 rounded-full transition-all duration-200 w-full text-left m3-ripple group",
       active
-        ? "bg-secondary-container text-secondary-onContainer font-medium shadow-sm"
-        : "text-surface-onVariant hover:bg-surface-container-high hover:text-surface-on"
+        ? "bg-secondary-container text-secondary-onContainer font-medium"
+        : "text-surface-onVariant hover:bg-surface-on/5"
     )}
   >
     <div className={clsx(
@@ -321,7 +325,7 @@ const NavButton: React.FC<{
     )}>
       {icon}
     </div>
-    <span className="text-[15px] tracking-wide">{label}</span>
+    <span className="text-sm tracking-wide font-medium">{label}</span>
   </button>
 );
 

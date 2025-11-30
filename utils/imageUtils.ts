@@ -84,7 +84,7 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
 
   // Check SOI (FF D8)
   if (data[0] !== 0xFF || data[1] !== 0xD8) throw new Error("Invalid JPEG");
-  
+
   chunks.push(data.subarray(0, 2));
   pos = 2;
 
@@ -96,23 +96,23 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
     while (pos < data.length && data[pos] === 0xFF) {
       pos++;
     }
-    
+
     if (pos >= data.length) break;
 
     const marker = data[pos];
-    
+
     // SOS (Start of Scan) - FF DA - Copy rest of file and stop
     if (marker === 0xDA) {
       chunks.push(data.subarray(startPos));
       break;
     }
-    
+
     // EOI (End of Image) - FF D9
     if (marker === 0xD9) {
       chunks.push(data.subarray(startPos, pos + 1));
       break;
     }
-    
+
     // RSTn (Restart Markers) - FF D0-D7
     if (marker >= 0xD0 && marker <= 0xD7) {
       chunks.push(data.subarray(startPos, pos + 1));
@@ -124,17 +124,17 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
     // Length (2 bytes) includes the length field itself
     const len = (data[pos + 1] << 8) | data[pos + 2];
     const segmentEnd = pos + 1 + len;
-    
+
     // Filter segments
     // Remove APP1 (0xE1) - Exif/XMP
     // Remove APPn (0xE0-0xEF) except APP0/APP2/APP14
     // Remove COM (0xFE)
     const isApp = marker >= 0xE0 && marker <= 0xEF;
     const isComment = marker === 0xFE;
-    
+
     // Keep JFIF (E0), ICC (E2), Adobe (EE)
-    const keep = (marker === 0xE0 || marker === 0xE2 || marker === 0xEE) || 
-                 (!isApp && !isComment);
+    const keep = (marker === 0xE0 || marker === 0xE2 || marker === 0xEE) ||
+      (!isApp && !isComment);
 
     if (keep) {
       chunks.push(data.subarray(startPos, segmentEnd));
@@ -142,7 +142,7 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
 
     pos = segmentEnd;
   }
-  
+
   return new Blob(chunks, { type: file.type });
 };
 
@@ -154,35 +154,35 @@ const scrubPng = async (file: File): Promise<Blob> => {
   const buffer = await file.arrayBuffer();
   const view = new DataView(buffer);
   const u8 = new Uint8Array(buffer);
-  
+
   // PNG Signature
   const signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
   for (let i = 0; i < 8; i++) {
     if (u8[i] !== signature[i]) throw new Error("Not a PNG");
   }
-  
+
   const chunks: Uint8Array[] = [u8.subarray(0, 8)];
   let pos = 8;
-  
+
   while (pos < u8.length) {
-     const length = view.getUint32(pos);
-     const typeStart = pos + 4;
-     const typeStr = String.fromCharCode(
-         u8[typeStart], u8[typeStart+1], u8[typeStart+2], u8[typeStart+3]
-     );
-     
-     const chunkTotalLength = length + 12; // 4 len + 4 type + data + 4 crc
-     
-     // Scrub list
-     const scrub = ['eXIf', 'tEXt', 'zTXt', 'iTXt', 'iCCP', 'dSIG'].includes(typeStr);
-     
-     if (!scrub) {
-         chunks.push(u8.subarray(pos, pos + chunkTotalLength));
-     }
-     
-     pos += chunkTotalLength;
+    const length = view.getUint32(pos);
+    const typeStart = pos + 4;
+    const typeStr = String.fromCharCode(
+      u8[typeStart], u8[typeStart + 1], u8[typeStart + 2], u8[typeStart + 3]
+    );
+
+    const chunkTotalLength = length + 12; // 4 len + 4 type + data + 4 crc
+
+    // Scrub list
+    const scrub = ['eXIf', 'tEXt', 'zTXt', 'iTXt', 'iCCP', 'dSIG'].includes(typeStr);
+
+    if (!scrub) {
+      chunks.push(u8.subarray(pos, pos + chunkTotalLength));
+    }
+
+    pos += chunkTotalLength;
   }
-  
+
   return new Blob(chunks, { type: file.type });
 };
 
@@ -198,12 +198,12 @@ const scrubMetadataCanvas = async (file: File): Promise<Blob> => {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error("Canvas context not available");
   ctx.drawImage(img, 0, 0);
-  
+
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);
       else reject(new Error("Conversion failed"));
-    }, file.type); 
+    }, file.type);
   });
 };
 
@@ -235,15 +235,15 @@ export const convertImageFormat = async (file: File, format: 'image/jpeg' | 'ima
   canvas.height = img.height;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error("Canvas context not available");
-  
+
   // Fill background white for JPEGs to avoid black transparency
   if (format === 'image/jpeg') {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
-  
+
   ctx.drawImage(img, 0, 0);
-  
+
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);
@@ -267,12 +267,12 @@ export const compressImage = async (file: File, quality: number): Promise<Blob> 
   // Force JPEG or WEBP for compression if PNG (since PNG is lossless usually)
   let targetType = file.type;
   if (targetType === 'image/png') {
-     if (quality < 1) targetType = 'image/jpeg'; 
+    if (quality < 1) targetType = 'image/jpeg';
   }
 
   if (targetType === 'image/jpeg') {
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   ctx.drawImage(img, 0, 0);
