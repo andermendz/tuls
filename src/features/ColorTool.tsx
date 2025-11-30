@@ -8,6 +8,7 @@ import { Palette, RefreshCw, Copy, Check, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 export const ColorTool: React.FC = () => {
     const [fileData, setFileData] = useState<FileData | null>(null);
@@ -23,6 +24,8 @@ export const ColorTool: React.FC = () => {
             try {
                 const extracted = await extractColors(fileData.previewUrl, 8);
                 setColors(extracted);
+                // Track successful extraction
+                logEvent('Tool', 'Process', 'Palette Generator');
             } catch (err) {
                 console.error("Failed to extract colors", err);
             } finally {
@@ -37,6 +40,8 @@ export const ColorTool: React.FC = () => {
         const success = await copyToClipboard(hex);
         if (success) {
             setCopiedHex(hex);
+            // Track copy action
+            logEvent('Interaction', 'Copy Color', 'Palette Generator');
             setTimeout(() => setCopiedHex(null), 2000);
         }
     };

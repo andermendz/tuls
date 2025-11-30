@@ -9,6 +9,7 @@ import { removeBackground } from '@imgly/background-removal';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 export const BackgroundRemoverTool: React.FC = () => {
     const [fileData, setFileData] = useState<FileData | null>(null);
@@ -32,6 +33,9 @@ export const BackgroundRemoverTool: React.FC = () => {
         setProcessedBlob(null);
         setViewMode('removed');
 
+        // Track processing start
+        logEvent('Tool', 'Process', 'Background Remover');
+
         try {
             // Resize image to max 1024px to prevent browser freeze
             const resizedBlob = await resizeImage(fileData.file, 1024);
@@ -54,6 +58,9 @@ export const BackgroundRemoverTool: React.FC = () => {
 
     const handleDownload = () => {
         if (processedBlob && fileData) {
+            // Track download
+            logEvent('Tool', 'Download', 'Background Remover');
+
             const newName = fileData.name.substring(0, fileData.name.lastIndexOf('.')) + '_no_bg.png';
             downloadBlob(processedBlob, newName);
         }

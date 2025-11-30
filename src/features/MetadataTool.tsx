@@ -7,6 +7,7 @@ import { getExifData, scrubMetadata, downloadBlob } from '../utils/imageUtils';
 import { ShieldCheck, Info, RefreshCw, AlertTriangle, ScanLine, Loader2, Camera, MapPin, Calendar } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 export const MetadataTool: React.FC = () => {
   const [fileData, setFileData] = useState<FileData | null>(null);
@@ -21,6 +22,8 @@ export const MetadataTool: React.FC = () => {
       getExifData(fileData.file)
         .then((data) => {
           setMetadata(data);
+          // Track metadata view
+          logEvent('Tool', 'View', 'Metadata Inspector');
         })
         .catch((e) => {
           console.error("Failed to load metadata", e);
@@ -36,6 +39,9 @@ export const MetadataTool: React.FC = () => {
     if (!fileData) return;
     setIsProcessing(true);
     try {
+      // Track scrub action
+      logEvent('Tool', 'Process', 'Metadata Scrubber');
+
       const cleanBlob = await scrubMetadata(fileData.file);
       downloadBlob(cleanBlob, `clean_${fileData.name}`);
     } catch (e) {

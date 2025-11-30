@@ -3,6 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Moon, Sun, Monitor, Palette, Info, Github, Heart } from 'lucide-react';
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
+import { logEvent } from '../utils/analytics';
 
 interface SettingsProps {
   theme: 'light' | 'dark' | 'system';
@@ -23,7 +24,11 @@ export const Settings: React.FC<SettingsProps> = ({ theme, onThemeChange }) => {
     description: string
   }) => (
     <button
-      onClick={() => onThemeChange(value)}
+      onClick={() => {
+        onThemeChange(value);
+        // Track theme change
+        logEvent('Settings', 'Change Theme', value);
+      }}
       className={clsx(
         "flex items-center gap-4 p-4 rounded-m3-lg transition-all duration-200 w-full text-left group",
         theme === value

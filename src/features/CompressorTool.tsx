@@ -8,6 +8,7 @@ import { Download, RefreshCw, Sliders, TrendingDown, Loader2, Zap, Image as Imag
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 const PRESETS = [
   {
@@ -52,6 +53,9 @@ export const CompressorTool: React.FC = () => {
         const blob = await compressImage(fileData.file, quality);
         setCompressedBlob(blob);
         setViewMode('compressed'); // Auto-switch to compressed view when done
+
+        // Track successful compression
+        logEvent('Tool', 'Process', 'Compressor');
       } catch (err) {
         console.error(err);
       } finally {
@@ -90,6 +94,9 @@ export const CompressorTool: React.FC = () => {
 
   const handleDownload = () => {
     if (compressedBlob && fileData) {
+      // Track download
+      logEvent('Tool', 'Download', 'Compressor');
+
       const ext = compressedBlob.type === 'image/png' ? 'png' : (compressedBlob.type === 'image/webp' ? 'webp' : 'jpg');
       const newName = fileData.name.substring(0, fileData.name.lastIndexOf('.')) + '_compressed.' + ext;
       downloadBlob(compressedBlob, newName);

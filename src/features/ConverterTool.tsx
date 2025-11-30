@@ -8,6 +8,7 @@ import { FileOutput, ArrowRight, RefreshCw, Loader2, Check } from 'lucide-react'
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 const FORMATS = [
   { mime: 'image/jpeg', label: 'JPEG', ext: 'jpg', desc: 'Best for photos' },
@@ -24,6 +25,9 @@ export const ConverterTool: React.FC = () => {
     if (!fileData) return;
     setIsProcessing(true);
     try {
+      // Track conversion start
+      logEvent('Tool', 'Process', 'Converter');
+
       // @ts-ignore
       const blob = await convertImageFormat(fileData.file, selectedFormat.mime);
       const newName = fileData.name.substring(0, fileData.name.lastIndexOf('.')) + '.' + selectedFormat.ext;

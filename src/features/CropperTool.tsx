@@ -9,6 +9,7 @@ import { Crop, Download, RefreshCw, Monitor, Smartphone, Square, RectangleHorizo
 import { clsx } from 'clsx';
 import { SEO } from '../components/SEO';
 import { ToolContent } from '../components/ui/ToolContent';
+import { logEvent } from '../utils/analytics';
 
 const ASPECT_OPTIONS = [
   { value: undefined, label: 'Free', icon: Crop },
@@ -34,6 +35,9 @@ export const CropperTool: React.FC = () => {
     if (!fileData || !croppedAreaPixels) return;
     setIsProcessing(true);
     try {
+      // Track crop save
+      logEvent('Tool', 'Process', 'Cropper');
+
       const blob = await getCroppedImg(fileData.previewUrl, croppedAreaPixels);
       downloadBlob(blob, `cropped_${fileData.name}`);
     } catch (e) {
