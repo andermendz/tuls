@@ -57,7 +57,7 @@ const App: React.FC = () => {
   }, [theme]);
 
   const tools = [
-    { id: 'bg-remover', name: 'BG Remover', icon: Eraser, desc: 'Remove backgrounds with AI', color: 'bg-purple-600' },
+    { id: 'bg-remover', name: 'Background Remover', icon: Eraser, desc: 'Remove backgrounds with AI', color: 'bg-purple-600' },
     { id: 'metadata', name: 'Metadata', icon: ScanLine, desc: 'Inspect & remove EXIF data', color: 'bg-google-blue' },
     { id: 'converter', name: 'Converter', icon: ArrowRightLeft, desc: 'Change image formats', color: 'bg-google-red' },
     { id: 'compressor', name: 'Compressor', icon: Minimize2, desc: 'Reduce file size', color: 'bg-google-yellow' },
