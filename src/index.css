@@ -1,0 +1,277 @@
+/* Import Local Fonts */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/outfit/400.css';
+@import '@fontsource/outfit/500.css';
+@import '@fontsource/outfit/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Material You Expressive - Google Blue Seed */
+
+    /* Primary - Google Blue */
+    --color-primary: #1a73e8;
+    --color-primary-container: #d3e3fd;
+    --color-on-primary-container: #041e49;
+    --color-primary-foreground: #ffffff;
+
+    /* Secondary - Soft Blue Gray */
+    --color-secondary: #5f6368;
+    --color-secondary-container: #e8f0fe;
+    --color-on-secondary-container: #1f1f1f;
+
+    /* Tertiary - Google Green Accent */
+    --color-tertiary: #1e8e3e;
+    --color-tertiary-container: #ceead6;
+    --color-on-tertiary-container: #072711;
+
+    /* Error - Google Red */
+    --color-error: #d93025;
+    --color-error-container: #fce8e6;
+    --color-on-error-container: #5c0003;
+
+    /* Success */
+    --color-success: #1e8e3e;
+    --color-success-container: #ceead6;
+    --color-success-on-container: #072711;
+
+    /* Warning - Google Yellow */
+    --color-warning: #f9ab00;
+    --color-warning-container: #fef7e0;
+
+    /* Surfaces (Light Mode) - Clean Google White */
+    --color-surface: #ffffff;
+    --color-surface-dim: #dde3ea;
+    --color-surface-bright: #f8fafd;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f8fafd;
+    --color-surface-container: #f1f3f4;
+    --color-surface-container-high: #e8eaed;
+    --color-surface-container-highest: #dadce0;
+
+    --color-surface-on: #202124;
+    --color-surface-on-variant: #5f6368;
+    --color-outline: #80868b;
+    --color-outline-variant: #dadce0;
+
+    --color-background: #ffffff;
+}
+
+.dark {
+    /* Primary */
+    --color-primary: #a8c7fa;
+    --color-primary-container: #004a77;
+    --color-on-primary-container: #d3e3fd;
+    --color-primary-foreground: #062e6f;
+
+    /* Secondary */
+    --color-secondary: #c4c7c5;
+    --color-secondary-container: #3c4043;
+    --color-on-secondary-container: #e8eaed;
+
+    /* Tertiary */
+    --color-tertiary: #81c995;
+    --color-tertiary-container: #0d5223;
+    --color-on-tertiary-container: #ceead6;
+
+    /* Error */
+    --color-error: #f28b82;
+    --color-error-container: #8c1d18;
+    --color-on-error-container: #fce8e6;
+
+    /* Surfaces (Dark Mode) - Google Dark */
+    --color-surface: #111318;
+    --color-surface-dim: #111318;
+    --color-surface-bright: #37393e;
+    --color-surface-container-lowest: #0c0e13;
+    --color-surface-container-low: #191c20;
+    --color-surface-container: #1d2024;
+    --color-surface-container-high: #282a2f;
+    --color-surface-container-highest: #33353a;
+
+    --color-surface-on: #e2e2e6;
+    --color-surface-on-variant: #c4c7c5;
+    --color-outline: #8e918f;
+    --color-outline-variant: #444746;
+
+    --color-background: #111318;
+}
+
+/* Google-style smooth transitions */
+* {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    transition-duration: 200ms;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Animations */
+@keyframes m3-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes m3-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes m3-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes m3-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Material ripple effect */
+.m3-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.m3-ripple::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, currentColor 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.3s;
+}
+
+.m3-ripple:active::after {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0.08;
+    transition: 0s;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-outline-variant);
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-outline);
+}
+
+/* Focus */
+.m3-focus:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+    background: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+}
+
+/* Surface tint overlay */
+.m3-surface-tint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-primary);
+    opacity: 0.05;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* Slider styling */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--color-surface-container-highest);
+    border-radius: 100px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+}
+
+/* Hide default scrollbar for chips */
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}

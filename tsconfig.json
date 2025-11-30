@@ -20,7 +20,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*" // Updated to point to src
       ]
     },
     "allowImportingTsExtensions": true,
