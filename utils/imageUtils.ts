@@ -32,12 +32,50 @@ export const loadImage = (src: string): Promise<HTMLImageElement> => {
 };
 
 /**
+ * Resizes an image if it exceeds a maximum dimension, maintaining aspect ratio.
+ * This is crucial for AI processing performance to prevent browser crashes.
+ */
+export const resizeImage = async (file: File, maxDimension: number = 1500): Promise<Blob> => {
+  const dataUrl = await readFileAsDataURL(file);
+  const img = await loadImage(dataUrl);
+
+  if (img.width <= maxDimension && img.height <= maxDimension) {
+    return file; // No need to resize
+  }
+
+  let width = img.width;
+  let height = img.height;
+
+  if (width > height) {
+    if (width > maxDimension) {
+      height = Math.round(height * (maxDimension / width));
+      width = maxDimension;
+    }
+  } else {
+    if (height > maxDimension) {
+      width = Math.round(width * (maxDimension / height));
+      height = maxDimension;
+    }
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error("Canvas context not available");
+
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Resize failed"));
+    }, file.type, 0.9);
+  });
+};
+
+/**
  * Extracts EXIF data from a file using exifr.
- * This library provides comprehensive metadata extraction including:
- * - EXIF (camera settings, date, location)
- * - IPTC (copyright, keywords)
- * - XMP (extended metadata)
- * - ICC (color profiles)
  */
 export const getExifData = async (file: File): Promise<any> => {
   if (!file) {
@@ -45,9 +83,7 @@ export const getExifData = async (file: File): Promise<any> => {
   }
 
   try {
-    // Extract all available metadata with exifr
     const metadata = await exifr.parse(file, {
-      // Enable all metadata formats
       tiff: true,
       exif: true,
       gps: true,
@@ -55,11 +91,8 @@ export const getExifData = async (file: File): Promise<any> => {
       icc: true,
       jfif: true,
       ihdr: true,
-      // Merge all segments into one object
       mergeOutput: true,
-      // Include all tags
       pick: undefined,
-      // Translate GPS coordinates to decimal
       translateKeys: true,
       translateValues: true,
       reviveValues: true,
@@ -74,7 +107,6 @@ export const getExifData = async (file: File): Promise<any> => {
 
 /**
  * Scrubs metadata from JPEG files by slicing binary segments.
- * Uses subarray to prevent memory copying.
  */
 const scrubJpeg = async (file: File): Promise<Blob> => {
   const buffer = await file.arrayBuffer();
@@ -82,16 +114,14 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
   const chunks: Uint8Array[] = [];
   let pos = 0;
 
-  // Check SOI (FF D8)
   if (data[0] !== 0xFF || data[1] !== 0xD8) throw new Error("Invalid JPEG");
 
   chunks.push(data.subarray(0, 2));
   pos = 2;
 
   while (pos < data.length) {
-    if (data[pos] !== 0xFF) break; // Should be a marker or padding
+    if (data[pos] !== 0xFF) break;
 
-    // Skip padding FFs
     const startPos = pos;
     while (pos < data.length && data[pos] === 0xFF) {
       pos++;
@@ -101,38 +131,28 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
 
     const marker = data[pos];
 
-    // SOS (Start of Scan) - FF DA - Copy rest of file and stop
     if (marker === 0xDA) {
       chunks.push(data.subarray(startPos));
       break;
     }
 
-    // EOI (End of Image) - FF D9
     if (marker === 0xD9) {
       chunks.push(data.subarray(startPos, pos + 1));
       break;
     }
 
-    // RSTn (Restart Markers) - FF D0-D7
     if (marker >= 0xD0 && marker <= 0xD7) {
       chunks.push(data.subarray(startPos, pos + 1));
       pos++;
       continue;
     }
 
-    // Variable length segments
-    // Length (2 bytes) includes the length field itself
     const len = (data[pos + 1] << 8) | data[pos + 2];
     const segmentEnd = pos + 1 + len;
 
-    // Filter segments
-    // Remove APP1 (0xE1) - Exif/XMP
-    // Remove APPn (0xE0-0xEF) except APP0/APP2/APP14
-    // Remove COM (0xFE)
     const isApp = marker >= 0xE0 && marker <= 0xEF;
     const isComment = marker === 0xFE;
 
-    // Keep JFIF (E0), ICC (E2), Adobe (EE)
     const keep = (marker === 0xE0 || marker === 0xE2 || marker === 0xEE) ||
       (!isApp && !isComment);
 
@@ -143,19 +163,17 @@ const scrubJpeg = async (file: File): Promise<Blob> => {
     pos = segmentEnd;
   }
 
-  return new Blob(chunks, { type: file.type });
+  return new Blob(chunks as any, { type: file.type });
 };
 
 /**
  * Scrubs metadata from PNG files by filtering chunks.
- * Uses subarray to prevent memory copying.
  */
 const scrubPng = async (file: File): Promise<Blob> => {
   const buffer = await file.arrayBuffer();
   const view = new DataView(buffer);
   const u8 = new Uint8Array(buffer);
 
-  // PNG Signature
   const signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
   for (let i = 0; i < 8; i++) {
     if (u8[i] !== signature[i]) throw new Error("Not a PNG");
@@ -171,9 +189,8 @@ const scrubPng = async (file: File): Promise<Blob> => {
       u8[typeStart], u8[typeStart + 1], u8[typeStart + 2], u8[typeStart + 3]
     );
 
-    const chunkTotalLength = length + 12; // 4 len + 4 type + data + 4 crc
+    const chunkTotalLength = length + 12;
 
-    // Scrub list
     const scrub = ['eXIf', 'tEXt', 'zTXt', 'iTXt', 'iCCP', 'dSIG'].includes(typeStr);
 
     if (!scrub) {
@@ -183,11 +200,11 @@ const scrubPng = async (file: File): Promise<Blob> => {
     pos += chunkTotalLength;
   }
 
-  return new Blob(chunks, { type: file.type });
+  return new Blob(chunks as any, { type: file.type });
 };
 
 /**
- * Fallback scrubber using Canvas (destructive/lossy but reliable).
+ * Fallback scrubber using Canvas.
  */
 const scrubMetadataCanvas = async (file: File): Promise<Blob> => {
   const dataUrl = await readFileAsDataURL(file);
@@ -207,9 +224,6 @@ const scrubMetadataCanvas = async (file: File): Promise<Blob> => {
   });
 };
 
-/**
- * Main scrub function. Tries lossless binary scrub first, falls back to canvas.
- */
 export const scrubMetadata = async (file: File): Promise<Blob> => {
   try {
     if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
@@ -224,9 +238,6 @@ export const scrubMetadata = async (file: File): Promise<Blob> => {
   return scrubMetadataCanvas(file);
 };
 
-/**
- * Converts an image to a specific format.
- */
 export const convertImageFormat = async (file: File, format: 'image/jpeg' | 'image/png' | 'image/webp'): Promise<Blob> => {
   const dataUrl = await readFileAsDataURL(file);
   const img = await loadImage(dataUrl);
@@ -236,7 +247,6 @@ export const convertImageFormat = async (file: File, format: 'image/jpeg' | 'ima
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error("Canvas context not available");
 
-  // Fill background white for JPEGs to avoid black transparency
   if (format === 'image/jpeg') {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -252,9 +262,6 @@ export const convertImageFormat = async (file: File, format: 'image/jpeg' | 'ima
   });
 };
 
-/**
- * Compresses an image by adjusting quality (JPEG/WEBP only mostly).
- */
 export const compressImage = async (file: File, quality: number): Promise<Blob> => {
   const dataUrl = await readFileAsDataURL(file);
   const img = await loadImage(dataUrl);
@@ -264,7 +271,6 @@ export const compressImage = async (file: File, quality: number): Promise<Blob> 
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error("Canvas context not available");
 
-  // Force JPEG or WEBP for compression if PNG (since PNG is lossless usually)
   let targetType = file.type;
   if (targetType === 'image/png') {
     if (quality < 1) targetType = 'image/jpeg';
@@ -285,9 +291,6 @@ export const compressImage = async (file: File, quality: number): Promise<Blob> 
   });
 };
 
-/**
- * Helper to create the cropped image from react-easy-crop pixels
- */
 export const getCroppedImg = async (
   imageSrc: string,
   pixelCrop: { x: number; y: number; width: number; height: number },

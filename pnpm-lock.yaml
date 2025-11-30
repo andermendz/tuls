@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@imgly/background-removal':
+        specifier: ^1.7.0
+        version: 1.7.0(onnxruntime-web@1.21.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -283,6 +286,11 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@imgly/background-removal@1.7.0':
+    resolution: {integrity: sha512-/1ZryrMYg2ckIvJKoTu5Np50JfYMVffDMlVmppw/BdbN3pBTN7e6stI5/7E/LVh9DDzz6J588s7sWqul3fy5wA==}
+    peerDependencies:
+      onnxruntime-web: 1.21.0
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -904,6 +912,13 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
+
+  '@imgly/background-removal@1.7.0(onnxruntime-web@1.21.0)':
+    dependencies:
+      lodash-es: 4.17.21
+      ndarray: 1.0.19
+      onnxruntime-web: 1.21.0
+      zod: 3.25.76
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:

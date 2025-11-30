@@ -11,13 +11,15 @@ import {
   Settings as SettingsIcon,
   Sparkles,
   Zap,
-  Palette
+  Palette,
+  Eraser // Import Eraser icon
 } from 'lucide-react';
 import { MetadataTool } from './features/MetadataTool';
 import { ConverterTool } from './features/ConverterTool';
 import { CompressorTool } from './features/CompressorTool';
 import { CropperTool } from './features/CropperTool';
 import { ColorTool } from './features/ColorTool';
+import { BackgroundRemoverTool } from './features/BackgroundRemoverTool'; // Import Component
 import { Settings } from './features/Settings';
 import { ToolType } from './types';
 
@@ -55,15 +57,17 @@ const App: React.FC = () => {
   }, [theme]);
 
   const tools = [
+    { id: 'bg-remover', name: 'BG Remover', icon: Eraser, desc: 'Remove backgrounds with AI', color: 'bg-purple-600' },
     { id: 'metadata', name: 'Metadata', icon: ScanLine, desc: 'Inspect & remove EXIF data', color: 'bg-google-blue' },
     { id: 'converter', name: 'Converter', icon: ArrowRightLeft, desc: 'Change image formats', color: 'bg-google-red' },
     { id: 'compressor', name: 'Compressor', icon: Minimize2, desc: 'Reduce file size', color: 'bg-google-yellow' },
     { id: 'cropper', name: 'Cropper', icon: Crop, desc: 'Resize & crop images', color: 'bg-google-green' },
-    { id: 'palette', name: 'Palette', icon: Palette, desc: 'Extract color schemes', color: 'bg-purple-500' },
+    { id: 'palette', name: 'Palette', icon: Palette, desc: 'Extract color schemes', color: 'bg-pink-500' },
   ];
 
   const renderContent = () => {
     switch (activeTool) {
+      case 'bg-remover': return <BackgroundRemoverTool />;
       case 'metadata': return <MetadataTool />;
       case 'converter': return <ConverterTool />;
       case 'compressor': return <CompressorTool />;

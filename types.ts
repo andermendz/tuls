@@ -1,4 +1,4 @@
-export type ToolType = 'dashboard' | 'metadata' | 'converter' | 'compressor' | 'cropper' | 'settings';
+export type ToolType = 'dashboard' | 'metadata' | 'converter' | 'compressor' | 'cropper' | 'palette' | 'bg-remover' | 'settings';
 
 export interface FileData {
   file: File;
